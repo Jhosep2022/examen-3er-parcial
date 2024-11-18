@@ -7,7 +7,6 @@ test.describe('Pruebas de la Página Principal de ToDo', () => {
     let randomProjectName: string;
 
     test.beforeEach(async ({ page }) => {
-        // Inicializamos la página de pruebas y el nombre del proyecto
         todoHomePage = new ToDoHomePage(page);
         await todoHomePage.goto();
         randomProjectName = generateRandomProjectName();
@@ -20,10 +19,8 @@ test.describe('Pruebas de la Página Principal de ToDo', () => {
         await todoHomePage.passwordLoginInput.fill('joseamadeo');
         await todoHomePage.submitLoginButton.click();
 
-        // Crear un proyecto con nombre aleatorio
         await todoHomePage.createNewProject(randomProjectName);
 
-        // Cambiar el ícono del proyecto
         await todoHomePage.changeProjectIcon();
 
     });

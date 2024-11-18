@@ -1,7 +1,7 @@
-import {expect, Locator, Page} from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
-export class ToDoHomePage{
-    readonly url ="https://todo.ly/";
+export class ToDoHomePage {
+    readonly url = "https://todo.ly/";
     readonly page: Page;
     readonly logo: Locator;
     readonly signUpFreeButton: Locator;
@@ -21,7 +21,7 @@ export class ToDoHomePage{
     readonly optionsButton: Locator;
     readonly changeIconOption: Locator;
 
-    constructor(page: Page){
+    constructor(page: Page) {
         this.page = page;
         this.logo = page.locator('#logo');
         this.signUpFreeButton = page.locator('.HPHeaderSignup > a:nth-child(1)');
@@ -45,7 +45,6 @@ export class ToDoHomePage{
     async goto() {
         await this.page.goto(this.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
     }
-    
 
     async clickOnSignUpFreeButton() {
         await this.signUpFreeButton.waitFor({ state: 'visible' });
@@ -53,7 +52,7 @@ export class ToDoHomePage{
         await expect(this.signUpDialog).toBeVisible();
     }
 
-    async fillSignUpForm(fullName: string, email: string, password = "InsecurePwd") : Promise<void> {
+    async fillSignUpForm(fullName: string, email: string, password = "InsecurePwd"): Promise<void> {
         await this.fullNameInput.waitFor({ state: 'visible' });
         await this.fullNameInput.fill(fullName);
         await this.emailInput.fill(email);
@@ -63,20 +62,19 @@ export class ToDoHomePage{
 
     async saveNewUser() {
         await this.signUpButton.click();
-        await expect(this.page.getByText('Projects')).toBeVisible();
+        await expect(this.page.locator('text=Projects')).toBeVisible(); // Más específico
     }
-    
 
-    // crear un nuevo proyecto y cambiarle el icono por defecto
     async createNewProject(projectName: string) {
         await this.addNewProjectButton.waitFor({ state: 'attached' });
         await expect(this.addNewProjectButton).toBeVisible();
         await this.addNewProjectButton.click();
         await this.newProjectNameInput.fill(projectName);
         await this.newProjectNameButton.click();
-        await expect(this.page.getByText(projectName)).toBeVisible();
+
+        // Usa un selector más específico para evitar conflictos
+        await expect(this.page.locator(`.ProjItemContent:has-text("${projectName}")`)).toBeVisible();
     }
-    
 
     async changeProjectIcon() {
         await this.optionsButton.waitFor({ state: 'visible' });
@@ -84,5 +82,4 @@ export class ToDoHomePage{
         await this.changeIconOption.waitFor({ state: 'visible' });
         await this.changeIconOption.click();
     }
-    
 }
